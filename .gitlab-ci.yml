@@ -1,0 +1,67 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build-backend:
+  stage: build
+  tags:
+    - build
+  script:
+    - cd backend/
+    - dotnet publish -f net6.0 -c Release -o ./build
+  artifacts:
+    untracked: false
+    when: on_success
+    expire_in: "30 days"
+    paths:
+      - backend/build
+
+build-frontend:
+  stage: build
+  tags:
+    - build
+  script:
+    - cd frontend/
+    - npm i
+    - npm run build
+    - mv dist build
+  artifacts:
+    untracked: false
+    when: on_success
+    expire_in: "30 days"
+    paths:
+      - frontend/build
+
+
+test-backend-unit-bl:
+  stage: test
+  tags:
+    - test
+  script:
+    - cd test/UnitBL/
+    - dotnet test
+
+
+test-backend-unit-db:
+  stage: test
+  tags:
+    - test
+  script:
+    - cd test/UnitDB/
+    - dotnet test 
+
+
+deploy:
+  stage: deploy
+  tags:
+    - deploy
+  script:
+    - sshpass -p $PROD_PASSWORD rsync -e "ssh -o StrictHostKeyChecking=no" -a backend/build/ $PROD_USER@$PROD_HOST:/var/opt/app
+    - sshpass -p $PROD_PASSWORD rsync -e "ssh -o StrictHostKeyChecking=no" -a --delete frontend/build/ $PROD_USER@$PROD_HOST:/var/www/site
+    - echo $PROD_PASSWORD | sshpass -p $PROD_PASSWORD ssh $PROD_USER@$PROD_HOST sudo -S systemctl restart servering-backend.service
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop" || $CI_COMMIT_REF_NAME == "main"'
+      when: manual
+    - when: never
+
