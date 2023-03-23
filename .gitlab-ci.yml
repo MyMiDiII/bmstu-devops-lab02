@@ -59,6 +59,8 @@ deploy:
   script:
     - sshpass -p $PROD_PASSWORD rsync -e "ssh -o StrictHostKeyChecking=no" -a backend/build/ $PROD_USER@$PROD_HOST:/var/opt/app
     - sshpass -p $PROD_PASSWORD rsync -e "ssh -o StrictHostKeyChecking=no" -a --delete frontend/build/ $PROD_USER@$PROD_HOST:/var/www/site
+    - sshpass -p $PROD_PASSWORD rsync -e "ssh -o StrictHostKeyChecking=no" -a nginx.conf $PROD_USER@$PROD_HOST:/etc/nginx
+    - echo $PROD_PASSWORD | sshpass -p $PROD_PASSWORD ssh $PROD_USER@$PROD_HOST sudo -S service nginx restart
     - echo $PROD_PASSWORD | sshpass -p $PROD_PASSWORD ssh $PROD_USER@$PROD_HOST sudo -S systemctl restart servering-backend.service
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop" || $CI_COMMIT_REF_NAME == "main"'
