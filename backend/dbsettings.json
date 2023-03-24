@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=mouse.db.elephantsql.com;Database=$DB_USERNAME;Username=$DB_USERNAME;Password=$DB_PASSWORD"
+    "DefaultConnection": "Server=manny.db.elephantsql.com;Database=$DB_USERNAME;Username=$DB_USERNAME;Password=$DB_PASSWORD"
   },
 
   "Database": "Postgres"
