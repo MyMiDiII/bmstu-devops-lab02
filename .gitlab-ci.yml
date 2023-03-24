@@ -9,6 +9,8 @@ build-backend:
     - build
   script:
     - cd backend/
+    - export DB_USERNAME=$DB_USERNAME
+    - export DB_PASSWORD=$DB_PASSWORD
     - envsubst < dbsettings.json
     - dotnet publish -f net6.0 -c Release -o ./build
   artifacts:
