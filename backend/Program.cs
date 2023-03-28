@@ -12,7 +12,7 @@ namespace ServerING {
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder
                         .UseStartup<Startup>()
-                        .UseUrls("http://localhost:5555/");
+                        .UseUrls("http://localhost:5001/");
                 });
     }
 }
