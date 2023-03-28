@@ -16,7 +16,7 @@ build-backend:
   artifacts:
     untracked: false
     when: on_success
-    expire_in: "30 days"
+    expire_in: "1 hour"
     paths:
       - backend/build
 
@@ -32,7 +32,7 @@ build-frontend:
   artifacts:
     untracked: false
     when: on_success
-    expire_in: "30 days"
+    expire_in: "1 hour"
     paths:
       - frontend/build
 
