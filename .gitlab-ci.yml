@@ -9,11 +9,14 @@ build-backend:
     - build
   script:
     - cd backend/
+    - export DB_USERNAME=$DB_USERNAME
+    - export DB_PASSWORD=$DB_PASSWORD
+    - envsubst < dbsettings.json | sponge dbsettings.json
     - dotnet publish -f net6.0 -c Release -o ./build
   artifacts:
     untracked: false
     when: on_success
-    expire_in: "30 days"
+    expire_in: "1 hour"
     paths:
       - backend/build
 
@@ -29,7 +32,7 @@ build-frontend:
   artifacts:
     untracked: false
     when: on_success
-    expire_in: "30 days"
+    expire_in: "1 hour"
     paths:
       - frontend/build
 
